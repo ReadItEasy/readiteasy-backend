@@ -31,6 +31,7 @@ ALLOWED_HOSTS = ["*"]
 # Application definition
 
 INSTALLED_APPS = [
+    'apiBooks.apps.ApibooksConfig',  # added for allowing user to be use
     'users.apps.UsersConfig',  # added for allowing user to be use
     'books.apps.BooksConfig',       # book app
     'dictionary.apps.DictionaryConfig',  # dictionary app
