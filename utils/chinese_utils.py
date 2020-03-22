@@ -73,3 +73,4 @@ def make_chapter_from_chinese_book(path_book_folder, book_name):
 def chinese_tokenize(chinese_text):
     tokenized_text = jieba.cut(chinese_text, HMM=HMM)
     return tokenized_text
+
