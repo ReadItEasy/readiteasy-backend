@@ -27,11 +27,11 @@ def language_detector(request):
 
 def get_book_chapter(request):
     t1 = time.time()
-    text_language = request.GET.get("textLang")
+    target_language = request.GET.get("targetLanguage")
     book_name = request.GET.get("bookName")
     chapter_number = request.GET.get("chapterNumber")
 
-    path_book_folder = os.path.join(path_languages, text_language, "books", book_name)
+    path_book_folder = os.path.join(path_languages, target_language, "books", book_name)
     path_book_chapters = os.path.join(path_book_folder, "chapters")
 
     make_chapter_from_chinese_book(path_book_folder, book_name)
@@ -66,7 +66,7 @@ def get_book_chapter(request):
 def get_user_known_words(request):
     t1 = time.time()
     user_id = request.GET.get("userId", "default")
-    target_language = request.GET.get("textLang", "error")
+    target_language = request.GET.get("targetLanguage", "error")
 
     path_user_known_words = os.path.join(path_users_known_words, user_id, "{}_known_words.txt".format(target_language))
     user_known_words_dict = {}
