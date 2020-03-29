@@ -73,7 +73,7 @@ def get_user_known_words(request):
     with open(path_user_known_words, 'r', encoding="utf-8") as infile:
         for line in infile:
             word = line.rstrip('\n')
-            user_known_words_dict[word] = "true"
+            user_known_words_dict[word] = True
 
     json = {"user_known_words_dict": user_known_words_dict}
     print("time to user known call : {}".format(time.time()-t1))

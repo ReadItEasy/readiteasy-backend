@@ -25,7 +25,7 @@
         }
       }
     }
-  return false;
+    return false;
   }
 
   function getPosition(e) {
@@ -33,10 +33,10 @@
     var posy = 0;
 
     if (!e) var e = window.event;
-
+    console.log(e);
     if (e.pageX || e.pageY) {
-      posx = e.pageX;
-      posy = e.pageY;
+      posx = e.layerX;
+      posy = e.layerY;
     } else if (e.clientX || e.clientY) {
       posx = e.clientX + document.body.scrollLeft +
                          document.documentElement.scrollLeft;
