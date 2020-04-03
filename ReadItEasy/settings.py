@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from datetime import timedelta
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,24 +27,83 @@ SECRET_KEY = '$&lr@bg-yt5xyl71a!b*@ulf51jz3r$2!kxpegi%zrt*4ag1h$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["*"]
+# ALLOWED_HOSTS = ["*"]
+
+# CSRF_COOKIE_NAME = "XSRF-TOKEN"
+CSRF_COOKIE_NAME = "csrftoken"
+
 
 CORS_ORIGIN_ALLOW_ALL = True
 # Application definition
 
+CORS_ORIGIN_WHITELIST = (
+    # TODO - set this properly for production
+    'https://127.0.0.1:8080',
+    'https://127.0.0.1:8000',
+)
+
 INSTALLED_APPS = [
-    'apiBooks.apps.ApibooksConfig',  # added for allowing user to be use
-    'users.apps.UsersConfig',  # added for allowing user to be use
-    'books.apps.BooksConfig',       # book app
-    'dictionary.apps.DictionaryConfig',  # dictionary app
+    # Django Apps
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Local Apis
+    # 'apiBooks.apps.ApibooksConfig',
+    'apiBooks',
+    # 'apiUsers.apps.ApiusersConfig',  # added for allowing user to be use
+    'apiUsers',  # added for allowing user to be use
+
+    # Local old apps
+    # 'users.apps.UsersConfig',  # added for allowing user to be use
+    'books.apps.BooksConfig',  # book app
+    'dictionary.apps.DictionaryConfig',  # dictionary app
+
+    # Third Party Apps
     'corsheaders',
+    'rest_framework',
+    'rest_framework.authtoken',
+
 ]
+
+AUTH_USER_MODEL = 'apiUsers.User'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        # 'rest_framework.authentication.TokenAuthentication',  # <-- And here
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+}
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=14),
+    'ROTATE_REFRESH_TOKENS': True,
+    'BLACKLIST_AFTER_ROTATION': False,
+
+    'ALGORITHM': 'HS256',
+    # 'SIGNING_KEY': settings.SECRET_KEY,
+    'VERIFYING_KEY': None,
+    'AUDIENCE': None,
+    'ISSUER': None,
+
+    'AUTH_HEADER_TYPES': ('Bearer',),
+    'USER_ID_FIELD': 'id',
+    'USER_ID_CLAIM': 'user_id',
+
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+
+    # 'JTI_CLAIM': 'jti',
+    #
+    # 'SLIDING_TOKEN_REFRESH_EXP_CLAIM': 'refresh_exp',
+    # 'SLIDING_TOKEN_LIFETIME': timedelta(minutes=5),
+    # 'SLIDING_TOKEN_REFRESH_LIFETIME': timedelta(days=14),
+}
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',

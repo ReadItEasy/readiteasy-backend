@@ -29,5 +29,7 @@ urlpatterns = [
     path('', include('dictionary.urls')),
     path('', include('users.urls')),
     path('api-books/', include('apiBooks.urls')),
+    path('', include('apiUsers.urls')),
+# url(r'^api/', include('api.urls')),
 
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)  # for production
