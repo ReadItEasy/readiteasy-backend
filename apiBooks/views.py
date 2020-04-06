@@ -76,7 +76,7 @@ def get_user_known_words(request):
             user_known_words_dict[word] = True
 
     json = {"user_known_words_dict": user_known_words_dict}
-    print("time to user known call : {}".format(time.time()-t1))
+    print("time to user known words call : {}".format(time.time()-t1))
 
     return JsonResponse(json)
 

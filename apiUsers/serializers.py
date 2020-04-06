@@ -5,7 +5,7 @@ from apiUsers.models import User, UserProfile
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('country',)
+        fields = ('country', 'mandarin_known_words')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -26,6 +26,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         return user
 
     def update(self, instance, validated_data):
+        # print("update")
+        # print(dir(instance))
+        # print(validated_data)
         profile_data = validated_data.pop('profile')
         profile = instance.profile
 
@@ -36,6 +39,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         # profile.dob = profile_data.get('dob', profile.dob)
         # profile.address = profile_data.get('address', profile.address)
         profile.country = profile_data.get('country', profile.country)
+        profile.mandarin_known_words = profile_data.get('mandarin_known_words', profile.mandarin_known_words)
+        profile.mandarin_known_words = profile.mandarin_known_words.replace('\r', '')
         # profile.city = profile_data.get('city', profile.city)
         # profile.zip = profile_data.get('zip', profile.zip)
         profile.save()
