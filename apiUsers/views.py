@@ -35,7 +35,7 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset,
                                          many=False)
         word = request.data.get("word")
-        mandarin_known_words_field = queryset.profile.mandarin_known_words
+        mandarin_known_words_field = queryset.profile.mandarin_known_words.replace('\r','')
         if word:
             mandarin_known_words_list = mandarin_known_words_field.split("\n")
             if word not in mandarin_known_words_list:
