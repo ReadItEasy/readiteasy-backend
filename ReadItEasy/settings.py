@@ -59,8 +59,8 @@ INSTALLED_APPS = [
 
     # Local old apps
     # 'users.apps.UsersConfig',  # added for allowing user to be use
-    'books.apps.BooksConfig',  # book app
-    'dictionary.apps.DictionaryConfig',  # dictionary app
+    # 'books.apps.BooksConfig',  # book app
+    # 'dictionary.apps.DictionaryConfig',  # dictionary app
 
     # Third Party Apps
     'corsheaders',

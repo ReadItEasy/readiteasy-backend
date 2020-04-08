@@ -25,11 +25,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.show_home),
     path('contact/', views.show_contact),
-    path('', include('books.urls')),
-    path('', include('dictionary.urls')),
-    path('', include('users.urls')),
-    path('api-books/', include('apiBooks.urls')),
-    path('', include('apiUsers.urls')),
+    # path('', include('books.urls')),
+    # path('', include('dictionary.urls')),
+    # path('', include('users.urls')),
+    path('api/books/', include('apiBooks.urls')),
+    path('api/users/', include('apiUsers.urls')),
 # url(r'^api/', include('api.urls')),
 
               ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)  # for production
