@@ -27,7 +27,7 @@ source venv/bin/activate
 ```
 And finally install the required packages
 ```
-pip install requirements.txt
+pip install -r requirements.txt
 ```
 ## Running the server
 Before running the server, it is important (especially in production) to collect the static files by running :
