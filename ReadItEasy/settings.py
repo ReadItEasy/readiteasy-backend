@@ -56,6 +56,7 @@ INSTALLED_APPS = [
     'apiBooks',
     # 'apiUsers.apps.ApiusersConfig',  # added for allowing user to be use
     'apiUsers',  # added for allowing user to be use
+    'apiWords',
 
     # Local old apps
     # 'users.apps.UsersConfig',  # added for allowing user to be use
