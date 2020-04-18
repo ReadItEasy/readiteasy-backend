@@ -18,3 +18,5 @@ instance/
 **/cache/
 
 ReadItEasy/static/
+
+db.sqlite3

@@ -5,12 +5,12 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ReadItEasy.settings')
 import django
 django.setup()
 
-from dictionary.models import MandarinWord
+from apiWords.models import MandarinWord
 
 # fetch the root project and other paths
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-path_ce_dict = os.path.join(BASE_DIR, 'data', 'dict', 'tab_cedict_ts.u8')
-path_neighbors_words = os.path.join(BASE_DIR, 'data', 'embeddings', 'chinese_embeddings_552books_neighbors.tsv')
+path_ce_dict = os.path.join(BASE_DIR, 'data','languages', 'mandarin', 'dict', 'tab_cedict_ts.u8')
+path_neighbors_words = os.path.join(BASE_DIR, 'data', 'languages', 'mandarin', 'embeddings', 'chinese_embeddings_552books_neighbors.tsv')
 
 dict_similar_words = {}
 with open(path_neighbors_words, 'r', encoding='utf-8') as infile:
@@ -23,6 +23,7 @@ MandarinWord.objects.all().delete()
 #
 #
 # iterate through our dict
+list_words = []
 with open(path_ce_dict, 'r', encoding='utf-8') as f:
     for n, line in enumerate(f):
         line = line.rstrip('\n')
@@ -39,9 +40,9 @@ with open(path_ce_dict, 'r', encoding='utf-8') as f:
                                 definitions=definitions,
                                 similar_words=similar_words,
                                 )
-        new_word.save()
-#
-        if n % 100==0:
+        list_words.append(new_word)
+        if n % 1000==0:
             print(n)
-#
-#
+
+MandarinWord.objects.bulk_create(list_words)
+print("done")
