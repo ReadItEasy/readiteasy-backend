@@ -27,7 +27,7 @@ SECRET_KEY = '$&lr@bg-yt5xyl71a!b*@ulf51jz3r$2!kxpegi%zrt*4ag1h$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ["*"]
 
 # CSRF_COOKIE_NAME = "XSRF-TOKEN"
 CSRF_COOKIE_NAME = "csrftoken"
@@ -40,6 +40,7 @@ CORS_ORIGIN_WHITELIST = (
     # TODO - set this properly for production
     'https://127.0.0.1:8080',
     'https://127.0.0.1:8000',
+    'https://kirianguiller.github.io'
 )
 
 INSTALLED_APPS = [

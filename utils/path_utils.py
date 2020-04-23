@@ -7,3 +7,9 @@ class PathHandler:
 
     def corpus_statistics(self, language):
         return os.path.join(self.BASE_DIR, 'data', 'languages', language, 'statistics', 'corpus_rank_freqs.txt')
+
+    def extended_dict(self):
+        return os.path.join(self.BASE_DIR, 'data', 'languages', 'mandarin', 'dict', 'extended_dict.u8')
+
+    def mandarin_neighboors_words(self):
+        return os.path.join(self.BASE_DIR, 'data', 'languages', 'mandarin', 'embeddings', 'chinese_embeddings_552books_neighbors.tsv')
