@@ -2,16 +2,18 @@ import os
 from django.shortcuts import render
 from django.http import Http404, JsonResponse
 from utils.chinese_utils import make_chapter_from_chinese_book, chinese_tokenize
+from utils.path_utils import PathHandler
 import time
 
 # fetch the root project and app path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
 # path languages
-path_languages = os.path.join(BASE_DIR, 'data_new', 'languages')
+path_languages = os.path.join(BASE_DIR, 'data', 'languages')
 
 # path user known words
-path_users_known_words = os.path.join(BASE_DIR, 'data_new', 'users')
+path_users_known_words = os.path.join(BASE_DIR, 'data', 'users')
 
 
 def get_languages(request):
