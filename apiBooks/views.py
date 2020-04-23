@@ -19,6 +19,7 @@ def get_languages(request):
     for language in os.listdir(path_languages):
         books = os.listdir(os.path.join(path_languages, language, 'books'))
         languages.append({"lang":language, "books": books})
+        print(languages)
 
     return JsonResponse({"languages" : languages})
 

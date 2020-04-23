@@ -40,7 +40,8 @@ CORS_ORIGIN_WHITELIST = (
     # TODO - set this properly for production
     'https://127.0.0.1:8080',
     'https://127.0.0.1:8000',
-    'https://kirianguiller.github.io'
+    'https://kirianguiller.github.io',
+    'https://readiteasy.com',
 )
 
 INSTALLED_APPS = [
