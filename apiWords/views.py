@@ -1,7 +1,19 @@
+import os
+
+from django.http import JsonResponse
+
+from rest_framework.decorators import action
 from rest_framework import viewsets
 
 from apiWords.models import MandarinWord
 from apiWords.serializers import MandarinWordSerializer
+
+from utils.path_utils import PathHandler
+
+# fetch the root project and app path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+paths = PathHandler(BASE_DIR)
 
 
 class MandarinWordSet(viewsets.ModelViewSet):
@@ -30,3 +42,29 @@ class MandarinWordSet(viewsets.ModelViewSet):
             queryset = queryset.filter(pronunciation=pronunciation)
 
         return queryset
+
+    @action(detail=False, methods=['GET'], name='Get a word statistics')
+    def word_statistics(self, request, pk=None):
+        """Does something on single item."""
+        queryset = MandarinWord.objects.all()
+        serializer = self.get_serializer(queryset,
+                                         many=False)
+        word = self.request.query_params.get('word', None)
+
+        with open(paths.corpus_statistics('mandarin'), 'r', encoding="utf-8") as infile:
+            first_line = infile.readline()
+            target_rank, target_freq, n_tokens = 0., 0., 0.
+            if "tokens" in first_line:
+                n_tokens = float((first_line.rstrip("\n").split("\t")[1]))
+            for line in infile:
+                char, rank, freq = line.rstrip("\n").split("\t")
+                if char == word:
+                    target_rank, target_freq = int(rank), float(freq)
+                    break
+
+        json = {
+            "word": word,
+            "rank": target_rank,
+            "freq": target_freq,
+        }
+        return JsonResponse(json)
