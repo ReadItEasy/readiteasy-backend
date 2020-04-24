@@ -10,7 +10,8 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Add custom claims
         token['user_id'] = user.id
         token['email'] = user.email
-
+        token['first_name'] = user.first_name
+        print("user", token['first_name'])
         return token
 
 

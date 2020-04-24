@@ -22,9 +22,9 @@ from django.conf.urls.static import static # for production
 from . import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('', views.show_home),
-    path('contact/', views.show_contact),
+    path('api/admin/', admin.site.urls),
+    path('api/', views.show_home),
+    path('api/contact/', views.show_contact),
     # path('', include('books.urls')),
     # path('', include('dictionary.urls')),
     # path('', include('users.urls')),
