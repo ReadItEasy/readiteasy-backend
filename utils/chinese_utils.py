@@ -145,9 +145,3 @@ def make_statistics_from_chinese_book(path_book_folder, book_name):
         write_freqs_dict(path_raw, path_book_statistics)
 
 
-
-path_book = "/home/wran/projects/readiteasy/readiteasy-backend/data/languages/mandarin/books/1984_orwell/raw/1984_orwell.txt"
-
-with open(path_book, 'r', encoding='utf-8') as infile:
-    write_freqs_dict(path_book, path_book + 'xxx')
-
