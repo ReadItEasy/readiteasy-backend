@@ -1,7 +1,9 @@
 import os
 import re
+from collections import Counter
 import jieba
 from .list_utils import argmax_list
+
 
 
 jieba.initialize()
@@ -73,4 +75,79 @@ def make_chapter_from_chinese_book(path_book_folder, book_name):
 def chinese_tokenize(chinese_text):
     tokenized_text = jieba.cut(chinese_text, HMM=HMM)
     return tokenized_text
+
+
+def compute_freqs_dict(chinese_text):
+    tokenized_text = chinese_tokenize(chinese_text)
+    text_freqs = Counter(tokenized_text)
+    text_freqs = rmv_not_chinese(text_freqs)
+    n_tokens = sum(text_freqs.values())
+    n_types = len(set(text_freqs.keys()))
+
+    return n_tokens, n_types, text_freqs
+
+def write_freqs_dict(path_src, path_dest):
+    with open(path_src, 'r', encoding='utf-8') as infile:
+        text = infile.read()
+
+    n_tokens, n_types, text_freqs = compute_freqs_dict(text)
+    with open(path_dest, "w", encoding="utf-8") as outfile:
+        outfile.write("#tokens:\t{}\ttype:\t{}\n".format(n_tokens, n_types))
+        for rank, (char, freq) in enumerate(text_freqs.most_common()):
+            outfile.write("{}\t{}\t{}\n".format(char, rank+1, freq))
+
+
+def word_statistics_in_file(word, path_statistics):
+    with open(path_statistics, "r", encoding="utf-8") as infile:
+        meta = infile.readline()
+        _, n_tokens, _, n_types = meta.rstrip("\n").split("\t")
+        n_tokens = int(n_tokens)
+        n_types = int(n_types)
+        target_rank = 0
+        target_count = 0
+        for line in infile:
+            char, rank, count = line.rstrip("\n").split("\t")
+            if char == word:
+                target_rank = int(rank)
+                target_count = int(count)
+                break
+    
+    return target_rank, target_count, n_tokens, n_types
+
+def read_freqs_dict(path):
+    book_freqs = {}
+    with open(path, 'r', encoding='utf-8') as infile:
+        meta = infile.readline()
+        _, n_book_tokens, _, n_book_types = meta.rstrip("\n").split("\t")
+        n_book_tokens = int(n_book_tokens)
+        n_book_types = int(n_book_types)
+        count_cum_sum = 0
+        book_char_95percentile = ""
+        for line in infile:
+            char, rank, count = line.rstrip("\n").split("\t")
+            book_freqs[char] = int(count)
+            count_cum_sum += int(count)
+            if (not book_char_95percentile) and (count_cum_sum > int(0.95 * n_book_tokens)):
+                book_char_95percentile = char
+
+    return book_freqs, n_book_tokens, n_book_types, book_char_95percentile
+
+
+def make_statistics_from_chinese_book(path_book_folder, book_name):
+    path_folder_statistics = os.path.join(path_book_folder, "statistics")
+
+    if not os.path.isdir(path_folder_statistics):
+        os.mkdir(path_folder_statistics)
+
+    path_raw = os.path.join(path_book_folder, 'raw', book_name + '.txt')
+    path_book_statistics = path_raw.replace('/raw/', '/statistics/').replace('.txt', '_statistics.txt')
+    if not os.path.isdir(path_book_statistics):
+        write_freqs_dict(path_raw, path_book_statistics)
+
+
+
+path_book = "/home/wran/projects/readiteasy/readiteasy-backend/data/languages/mandarin/books/1984_orwell/raw/1984_orwell.txt"
+
+with open(path_book, 'r', encoding='utf-8') as infile:
+    write_freqs_dict(path_book, path_book + 'xxx')
 

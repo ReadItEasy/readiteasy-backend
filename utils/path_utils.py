@@ -13,3 +13,20 @@ class PathHandler:
 
     def mandarin_neighboors_words(self):
         return os.path.join(self.BASE_DIR, 'data', 'languages', 'mandarin', 'embeddings', 'chinese_embeddings_552books_neighbors.tsv')
+
+    def languages(self):
+        return os.path.join(self.BASE_DIR, 'data', 'languages')
+
+    # def language(self, language):
+    #     return os.path.join(self.BASE_DIR, 'data', 'languages', language)
+
+    def books(self, language):
+        return os.path.join(self.BASE_DIR, 'data', 'languages', language, 'books')
+
+    def book(self, language, book):
+        return os.path.join(self.BASE_DIR, 'data', 'languages', language, 'books', book)
+
+    def book_statistics(self, language, book):
+        return os.path.join(self.BASE_DIR, 'data', 'languages', language, 'books', 
+                              book, 'statistics', book + '_statistics.txt')
+

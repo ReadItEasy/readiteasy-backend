@@ -1,3 +1,4 @@
+import os
 from django.http import JsonResponse
 
 from rest_framework.views import APIView
@@ -10,6 +11,14 @@ from rest_framework.decorators import action
 from apiUsers.models import User
 from apiUsers.serializers import UserSerializer
 from apiUsers.permissions import IsLoggedInUserOrAdmin, IsAdminUser
+from utils.path_utils import PathHandler
+from utils.chinese_utils import read_freqs_dict, word_statistics_in_file
+
+
+
+# fetch the root project and app path
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+paths = PathHandler(BASE_DIR)
 
 
 class UserViewSet(viewsets.ModelViewSet):
@@ -102,6 +111,42 @@ class UserViewSet(viewsets.ModelViewSet):
         else:
             message = "no word was found in the post request"
         json = {"message": message}
+        return JsonResponse(json)
+
+
+    @action(detail=True, methods=['GET'], name='Get the known words for a book')
+    def book_known_words(self, request, pk=None):
+        print(request.user)
+        """Does something on single item."""
+        queryset = User.objects.get(pk=pk)
+        serializer = self.get_serializer(queryset,
+                                         many=False)
+        mandarin_known_words_field = queryset.profile.mandarin_known_words.replace('\r','')
+        mandarin_known_words_list = mandarin_known_words_field.split('\n')
+        book_name = request.query_params.get('bookName', None)
+        target_language = request.query_params.get('targetLanguage', None)
+
+        path_book_statistics = paths.book_statistics(target_language, book_name)
+        book_freqs, n_book_tokens, n_book_types, book_char_95percentile = read_freqs_dict(path_book_statistics)
+
+        book_rank_95percentile, _, _, _ = word_statistics_in_file(book_char_95percentile,
+                                                              paths.corpus_statistics(target_language))
+
+        n_user_tokens = 0
+        n_user_types = 0
+        for known_word in mandarin_known_words_list:
+            n_user_tokens += book_freqs.get(known_word, 0)
+            if known_word in book_freqs:
+                n_user_types += 1
+
+        json = {
+          "n_user_tokens": n_user_tokens,
+          "n_user_types" : n_user_types,
+          "n_book_tokens": n_book_tokens,
+          "n_book_types": n_book_types,
+          "book_char_95percentile": book_char_95percentile,
+          "book_rank_95percentile": book_rank_95percentile
+        }
         return JsonResponse(json)
 
 

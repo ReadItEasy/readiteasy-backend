@@ -9,6 +9,7 @@ from apiWords.models import MandarinWord
 from apiWords.serializers import MandarinWordSerializer
 
 from utils.path_utils import PathHandler
+from utils.chinese_utils import word_statistics_in_file
 
 # fetch the root project and app path
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -44,27 +45,88 @@ class MandarinWordSet(viewsets.ModelViewSet):
         return queryset
 
     @action(detail=False, methods=['GET'], name='Get a word statistics')
-    def word_statistics(self, request, pk=None):
+    def word_corpus_statistics(self, request, pk=None):
         """Does something on single item."""
-        queryset = MandarinWord.objects.all()
-        serializer = self.get_serializer(queryset,
-                                         many=False)
+        # queryset = MandarinWord.objects.all()
+        # serializer = self.get_serializer(queryset,
+        #                                  many=False)
         word = self.request.query_params.get('word', None)
 
-        with open(paths.corpus_statistics('mandarin'), 'r', encoding="utf-8") as infile:
-            first_line = infile.readline()
-            target_rank, target_freq, n_tokens = 0., 0., 0.
-            if "tokens" in first_line:
-                n_tokens = float((first_line.rstrip("\n").split("\t")[1]))
-            for line in infile:
-                char, rank, freq = line.rstrip("\n").split("\t")
-                if char == word:
-                    target_rank, target_freq = int(rank), float(freq)
-                    break
+        target_rank, target_count, n_tokens, n_types = word_statistics_in_file(word, paths.corpus_statistics('mandarin'))
+
+        # with open(paths.corpus_statistics('mandarin'), 'r', encoding="utf-8") as infile:
+            # first_line = infile.readline()
+            # target_rank, target_freq, n_tokens = 0., 0., 0.
+            # if "tokens" in first_line:
+                # n_tokens = float((first_line.rstrip("\n").split("\t")[1]))
+            # for line in infile:
+                # char, rank, freq = line.rstrip("\n").split("\t")
+                # if char == word:
+                    # target_rank, target_freq = int(rank), float(freq)
+                    # break
 
         json = {
             "word": word,
             "rank": target_rank,
-            "freq": target_freq,
+            "count": target_count,
+            "n_tokens": n_tokens,
+            "n_types": n_types,
         }
+        return JsonResponse(json)
+
+
+    @action(detail=False, methods=['GET'], name='Get a word book statistics')
+    def word_book_statistics(self, request, pk=None):
+        print(self.request.query_params)
+        word = self.request.query_params.get('word', None)
+        book_name = self.request.query_params.get('bookName', None)
+        target_language = self.request.query_params.get('targetLanguage', None)
+
+        path_book = paths.book(language=target_language, book=book_name)
+        path_book_statistics = os.path.join(path_book, 'statistics', book_name + '_statistics.txt')
+        
+        target_rank, target_count, n_tokens, n_types = word_statistics_in_file(word, path_book_statistics)
+        
+        # with open(path_book_statistics, 'r', encoding='utf-8') as infile:
+        #     meta = infile.readline()
+        #     _, n_book_tokens, _, n_book_types = meta.rstrip("\n").split("\t")
+        #     n_book_tokens = int(n_book_tokens)
+        #     n_book_types = int(n_book_types)
+
+        #     target_count, target_rank = None, None
+        #     for line in infile:
+        #         char, rank, count = line.rstrip("\n").split("\t")
+        #         if char == word:
+        #             target_rank = rank
+        #             target_count = count
+        #             break
+        #     print(meta, path_book_statistics)
+
+        json = {
+            "word": word,
+            "rank": target_rank,
+            "count": target_count,
+            "n_tokens": n_tokens,
+            "n_types": n_types,
+        }
+        print(json)
+        return JsonResponse(json)
+
+    @action(detail=False, methods=['GET'], name='Get similars word')
+    def word_similar_words(self, request, pk=None):
+        word = self.request.query_params.get('word', None)
+
+        with open(paths.mandarin_neighboors_words(), 'r', encoding='utf-8') as infile:
+            target_similar_words = []
+            for line in infile:
+                char, *similar_words = line.rstrip("\n").split("\t")
+                if char == word:
+                    target_similar_words = similar_words
+                    break
+
+        json = {
+            "word": word,
+            "target_similar_words": target_similar_words,
+        }
+        print(json)
         return JsonResponse(json)
