@@ -5,7 +5,7 @@ from apiUsers.models import User, UserProfile
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('country', 'mandarin_known_words')
+        fields = ('country', 'mandarin_known_words', 'english_known_words')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -41,6 +41,9 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         profile.country = profile_data.get('country', profile.country)
         profile.mandarin_known_words = profile_data.get('mandarin_known_words', profile.mandarin_known_words)
         profile.mandarin_known_words = profile.mandarin_known_words.replace('\r', '')
+
+        profile.english_known_words = profile_data.get('english_known_words', profile.english_known_words)
+        profile.english_known_words = profile.english_known_words.replace('\r', '')
         # profile.city = profile_data.get('city', profile.city)
         # profile.zip = profile_data.get('zip', profile.zip)
         profile.save()

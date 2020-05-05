@@ -21,6 +21,8 @@ class UserProfile(models.Model):
     # address = models.CharField(max_length=255)
     country = models.CharField(max_length=50)
     mandarin_known_words = models.TextField(blank=True, default='')
+    english_known_words = models.TextField(blank=True, default='')
+
     # city = models.CharField(max_length=50)
     # zip = models.CharField(max_length=5)
     # photo = models.ImageField(upload_to='uploads', blank=True)

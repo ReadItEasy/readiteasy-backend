@@ -44,14 +44,16 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset,
                                          many=False)
         word = request.data.get("word")
-        mandarin_known_words_field = queryset.profile.mandarin_known_words.replace('\r','')
+        target_language = request.data.get('targetLanguage', None)
+        mandarin_known_words_field = getattr(queryset.profile, f'{target_language}_known_words')
+        # mandarin_known_words_field = queryset.profile.mandarin_known_words.replace('\r','')
         if word:
             mandarin_known_words_list = mandarin_known_words_field.split("\n")
             if word not in mandarin_known_words_list:
                 mandarin_known_words_list.append(word)
                 mandarin_known_words_field = "\n".join(mandarin_known_words_list)
                 profile = {
-                    "mandarin_known_words": mandarin_known_words_field
+                    f"{target_language}_known_words": mandarin_known_words_field
                 }
 
                 data = {
@@ -82,14 +84,16 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset,
                                          many=False)
         word = request.data.get("word")
-        mandarin_known_words_field = queryset.profile.mandarin_known_words
+        target_language = request.data.get('targetLanguage', None)
+        mandarin_known_words_field = getattr(queryset.profile, f'{target_language}_known_words')
+
         if word:
             mandarin_known_words_list = mandarin_known_words_field.split("\n")
             if word in mandarin_known_words_list:
                 mandarin_known_words_list.remove(word)
                 mandarin_known_words_field = "\n".join(mandarin_known_words_list)
                 profile = {
-                    "mandarin_known_words" : mandarin_known_words_field
+                    f"{target_language}_known_words" : mandarin_known_words_field
                 }
 
                 data = {
