@@ -22,8 +22,7 @@ path_languages = os.path.join(BASE_DIR, 'data', 'languages')
 
 # Load nltk lemmatizer
 import nltk
-nltk.download('averaged_perceptron_tagger', os.path.join(BASE_DIR, "data", "languages", "english", "nltk_data"))
-nltk.download("wordnet", os.path.join(BASE_DIR, "data", "languages", "english", "nltk_data"))
+# nltk.download("wordnet", os.path.join(BASE_DIR, "data", "languages", "english", "nltk_data"))
 nltk.data.path.append(os.path.join(BASE_DIR, "data", "languages", "english", "nltk_data"))
 
 lemmatizer = nltk.stem.WordNetLemmatizer() 
