@@ -21,7 +21,7 @@ path_languages = os.path.join(BASE_DIR, 'data', 'languages')
 # path_users_known_words = os.path.join(BASE_DIR, 'data', 'users')
 
 # Load nltk lemmatizer
-import nltk
+# import nltk
 # # nltk.download("wordnet", os.path.join(BASE_DIR, "data", "languages", "english", "nltk_data"))
 # nltk.data.path.append(os.path.join(BASE_DIR, "data", "languages", "english", "nltk_data"))
 
@@ -85,7 +85,7 @@ def get_mandarin_book(request):
         chapter_text = infile.read()
 
     tokenized_chapter_text = list(chinese_tokenize(chapter_text))
-    tokenized_chapter_lemma = tokenized_chapter_text
+    # tokenized_chapter_lemma = tokenized_chapter_text
     json = {
         "tokenized_chapter_text": tokenized_chapter_text,
         # "tokenized_chapter_lemma": tokenized_chapter_lemma,
