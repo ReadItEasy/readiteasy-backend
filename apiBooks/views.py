@@ -21,11 +21,11 @@ path_languages = os.path.join(BASE_DIR, 'data', 'languages')
 # path_users_known_words = os.path.join(BASE_DIR, 'data', 'users')
 
 # Load nltk lemmatizer
-import nltk
-# nltk.download("wordnet", os.path.join(BASE_DIR, "data", "languages", "english", "nltk_data"))
-nltk.data.path.append(os.path.join(BASE_DIR, "data", "languages", "english", "nltk_data"))
+# import nltk
+# # nltk.download("wordnet", os.path.join(BASE_DIR, "data", "languages", "english", "nltk_data"))
+# nltk.data.path.append(os.path.join(BASE_DIR, "data", "languages", "english", "nltk_data"))
 
-lemmatizer = nltk.stem.WordNetLemmatizer() 
+# lemmatizer = nltk.stem.WordNetLemmatizer() 
 
 def get_languages(request):
     languages = []
@@ -88,7 +88,7 @@ def get_mandarin_book(request):
     tokenized_chapter_lemma = tokenized_chapter_text
     json = {
         "tokenized_chapter_text": tokenized_chapter_text,
-        "tokenized_chapter_lemma": tokenized_chapter_lemma,
+        # "tokenized_chapter_lemma": tokenized_chapter_lemma,
     }
     print("time to api call : {}".format(time.time()-t1))
     return JsonResponse(json)
@@ -123,18 +123,18 @@ def get_english_book(request):
 
     ### lemmatize the text
     # TODO : add a better lemmatizer
-    tokenized_chapter_lemma = []
-    for token in tokenized_chapter_text:
-        if token.endswith('ing') or token.endswith('d'):
-            lemma = lemmatizer.lemmatize(token, pos="v")
-        else:
-            lemma = lemmatizer.lemmatize(token)
-        tokenized_chapter_lemma.append(lemma)
+    # tokenized_chapter_lemma = []
+    # for token in tokenized_chapter_text:
+    #     if token.endswith('ing') or token.endswith('d'):
+    #         lemma = lemmatizer.lemmatize(token, pos="v")
+    #     else:
+    #         lemma = lemmatizer.lemmatize(token)
+    #     tokenized_chapter_lemma.append(lemma)
     # print(nltk.pos_tag(tokenized_chapter_text))
 
     json = {
         "tokenized_chapter_text": tokenized_chapter_text,
-        "tokenized_chapter_lemma": tokenized_chapter_lemma
+        # "tokenized_chapter_lemma": tokenized_chapter_lemma
     }
     print("time to api english book call : {}".format(time.time()-t1))
     return JsonResponse(json)
