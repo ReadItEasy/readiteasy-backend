@@ -1,10 +1,12 @@
 import os
 import re
+import time
+
 from django.shortcuts import render
 from django.http import Http404, JsonResponse
 from utils.chinese_utils import make_chapter_from_chinese_book, chinese_tokenize, make_statistics_from_chinese_book
 from utils.english_utils import make_chapter_from_english_book
-import time
+
 
 from utils.path_utils import PathHandler
 
@@ -18,6 +20,13 @@ path_languages = os.path.join(BASE_DIR, 'data', 'languages')
 # path user known words
 # path_users_known_words = os.path.join(BASE_DIR, 'data', 'users')
 
+# Load nltk lemmatizer
+import nltk
+nltk.download('averaged_perceptron_tagger', os.path.join(BASE_DIR, "data", "languages", "english", "nltk_data"))
+nltk.download("wordnet", os.path.join(BASE_DIR, "data", "languages", "english", "nltk_data"))
+nltk.data.path.append(os.path.join(BASE_DIR, "data", "languages", "english", "nltk_data"))
+
+lemmatizer = nltk.stem.WordNetLemmatizer() 
 
 def get_languages(request):
     languages = []
@@ -77,9 +86,10 @@ def get_mandarin_book(request):
         chapter_text = infile.read()
 
     tokenized_chapter_text = list(chinese_tokenize(chapter_text))
-    print(len(tokenized_chapter_text))
+    tokenized_chapter_lemma = tokenized_chapter_text
     json = {
         "tokenized_chapter_text": tokenized_chapter_text,
+        "tokenized_chapter_lemma": tokenized_chapter_lemma,
     }
     print("time to api call : {}".format(time.time()-t1))
     return JsonResponse(json)
@@ -109,13 +119,25 @@ def get_english_book(request):
     # split_pattern = r'\s'
     # new_string = re.sub(split_pattern, '\\1[cut]',  chapter_text)
     # tokenized_chapter_text = new_string.split('[cut]')
-    tokenized_chapter_text = re.split('(\W)', chapter_text)
-    # tokenized_chapter_text = list(chapter_text.split(' '))
-    # print(len(tokenized_chapter_text))
+    tokenized_chapter_text = re.split('([^a-zA-Z0-9-])', chapter_text)
+
+
+    ### lemmatize the text
+    # TODO : add a better lemmatizer
+    tokenized_chapter_lemma = []
+    for token in tokenized_chapter_text:
+        if token.endswith('ing') or token.endswith('d'):
+            lemma = lemmatizer.lemmatize(token, pos="v")
+        else:
+            lemma = lemmatizer.lemmatize(token)
+        tokenized_chapter_lemma.append(lemma)
+    # print(nltk.pos_tag(tokenized_chapter_text))
+
     json = {
         "tokenized_chapter_text": tokenized_chapter_text,
+        "tokenized_chapter_lemma": tokenized_chapter_lemma
     }
-    # print("time to api call : {}".format(time.time()-t1))
+    print("time to api english book call : {}".format(time.time()-t1))
     return JsonResponse(json)
 #
 # def get_user_known_words(request):
