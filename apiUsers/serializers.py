@@ -5,7 +5,7 @@ from apiUsers.models import User, UserProfile
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ('country', 'mandarin_known_words', 'english_known_words')
+        fields = ('country', 'mandarin_known_words', 'mandarin_study_words', 'english_known_words', 'english_study_words')
 
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -22,7 +22,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         user = User(**validated_data)
         user.set_password(password)
         user.save()
-        UserProfile.objects.create(user=user, **profile_data)
+        # UserProfile.objects.create(user=user, **profile_data)
+        User.objects.create(user=user, **profile_data)
         return user
 
     def update(self, instance, validated_data):
@@ -42,8 +43,13 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         profile.mandarin_known_words = profile_data.get('mandarin_known_words', profile.mandarin_known_words)
         profile.mandarin_known_words = profile.mandarin_known_words.replace('\r', '')
 
+        profile.mandarin_study_words = profile_data.get('mandarin_study_words', profile.mandarin_study_words)
+
         profile.english_known_words = profile_data.get('english_known_words', profile.english_known_words)
         profile.english_known_words = profile.english_known_words.replace('\r', '')
+        
+        profile.english_study_words = profile_data.get('english_study_words', profile.english_study_words)
+        
         # profile.city = profile_data.get('city', profile.city)
         # profile.zip = profile_data.get('zip', profile.zip)
         profile.save()

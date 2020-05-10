@@ -44,8 +44,9 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset,
                                          many=False)
         word = request.data.get("word")
+        list_ = request.data.get("list")
         target_language = request.data.get('targetLanguage', None)
-        mandarin_known_words_field = getattr(queryset.profile, f'{target_language}_known_words')
+        mandarin_known_words_field = getattr(queryset.profile, f'{target_language}_{list_}_words')
         # mandarin_known_words_field = queryset.profile.mandarin_known_words.replace('\r','')
         if word:
             mandarin_known_words_list = mandarin_known_words_field.split("\n")
@@ -53,7 +54,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 mandarin_known_words_list.append(word)
                 mandarin_known_words_field = "\n".join(mandarin_known_words_list)
                 profile = {
-                    f"{target_language}_known_words": mandarin_known_words_field
+                    f"{target_language}_{list_}_words": mandarin_known_words_field
                 }
 
                 data = {
@@ -84,8 +85,9 @@ class UserViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(queryset,
                                          many=False)
         word = request.data.get("word")
+        list_ = request.data.get("list")
         target_language = request.data.get('targetLanguage', None)
-        mandarin_known_words_field = getattr(queryset.profile, f'{target_language}_known_words')
+        mandarin_known_words_field = getattr(queryset.profile, f'{target_language}_{list_}_words')
 
         if word:
             mandarin_known_words_list = mandarin_known_words_field.split("\n")
@@ -93,7 +95,7 @@ class UserViewSet(viewsets.ModelViewSet):
                 mandarin_known_words_list.remove(word)
                 mandarin_known_words_field = "\n".join(mandarin_known_words_list)
                 profile = {
-                    f"{target_language}_known_words" : mandarin_known_words_field
+                    f"{target_language}_{list_}_words" : mandarin_known_words_field
                 }
 
                 data = {
