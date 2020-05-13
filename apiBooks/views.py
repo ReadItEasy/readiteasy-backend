@@ -148,39 +148,21 @@ def get_japanese_book(request):
     chapter_number = request.GET.get("chapterNumber")
 
     path_book_folder = paths.book(target_language, book_name)
-    # # path_raw = os.path.join(path_book_folder, 'raw', book_name)
-    # # path_statistics = os.path.join(path_book_folder, 'statistics')
     path_book_chapters = os.path.join(path_book_folder, "chapters")
 
     make_chapter_from_english_book(path_book_folder, book_name)
     print(path_book_folder, book_name)
-    # make_statistics_from_chinese_book(path_book_folder, book_name)
 
     path_book_chapter = os.path.join(path_book_chapters, "{}.txt".format(chapter_number))
     with open(path_book_chapter, "r", encoding="utf-8") as infile:
         chapter_text = infile.read()
 
-    # split_pattern = r'\s'
-    # new_string = re.sub(split_pattern, '\\1[cut]',  chapter_text)
-    # tokenized_chapter_text = new_string.split('[cut]')
     tokenized_chapter_text = japanese_tokenize(chapter_text)
-
-    ### lemmatize the text
-    # TODO : add a better lemmatizer
-    # tokenized_chapter_lemma = []
-    # for token in tokenized_chapter_text:
-    #     if token.endswith('ing') or token.endswith('d'):
-    #         lemma = lemmatizer.lemmatize(token, pos="v")
-    #     else:
-    #         lemma = lemmatizer.lemmatize(token)
-    #     tokenized_chapter_lemma.append(lemma)
-    # print(nltk.pos_tag(tokenized_chapter_text))
 
     json = {
         "tokenized_chapter_text": tokenized_chapter_text,
-        # "tokenized_chapter_lemma": tokenized_chapter_lemma
     }
-    print("time to api english book call : {}".format(time.time() - t1))
+    print("time to api japanese book call : {}".format(time.time() - t1))
     return JsonResponse(json)
 #
 # def get_user_known_words(request):

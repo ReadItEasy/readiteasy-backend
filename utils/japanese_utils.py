@@ -3,7 +3,7 @@ import os
 import JapaneseTokenizer
 
 
-def make_chapter_from_english_book(path_book_folder, book_name):
+def make_chapter_from_japanese_book(path_book_folder, book_name):
     path_book_chapters = os.path.join(path_book_folder, "chapters")
 
     if not os.path.isdir(path_book_chapters):
