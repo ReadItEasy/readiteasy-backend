@@ -1,6 +1,6 @@
 import os
 
-import JapaneseTokenizer
+import tinysegmenter
 
 
 def make_chapter_from_japanese_book(path_book_folder, book_name):
@@ -26,6 +26,6 @@ def make_chapter_from_japanese_book(path_book_folder, book_name):
 
 
 def japanese_tokenize(japanese_text):
-    mecab_wrapper = JapaneseTokenizer.MecabWrapper(dictType='ipadic')
-    tokenized_text = mecab_wrapper.tokenize(japanese_text).convert_list_object()
+    segmenter = tinysegmenter.TinySegmenter()
+    tokenized_text = segmenter.tokenize(japanese_text)
     return tokenized_text
