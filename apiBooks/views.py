@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.http import Http404, JsonResponse
 from utils.chinese_utils import make_chapter_from_chinese_book, chinese_tokenize, make_statistics_from_chinese_book
 from utils.english_utils import make_chapter_from_english_book
-from utils.japanese_utils import make_chapter_from_english_book, japanese_tokenize
+from utils.japanese_utils import make_chapter_from_japanese_book, japanese_tokenize
 
 
 from utils.path_utils import PathHandler
@@ -150,7 +150,7 @@ def get_japanese_book(request):
     path_book_folder = paths.book(target_language, book_name)
     path_book_chapters = os.path.join(path_book_folder, "chapters")
 
-    make_chapter_from_english_book(path_book_folder, book_name)
+    make_chapter_from_japanese_book(path_book_folder, book_name)
     print(path_book_folder, book_name)
 
     path_book_chapter = os.path.join(path_book_chapters, "{}.txt".format(chapter_number))
