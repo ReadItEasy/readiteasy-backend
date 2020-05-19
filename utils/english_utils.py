@@ -17,6 +17,8 @@ def make_chapter_from_english_book(path_book_folder, book_name):
                 if (n+1) % 100 == 0:
                     chapters.append(chapter)
                     chapter = ""
+            if chapter:
+                chapters.append(chapter)
         # chapter_separator, _ = find_chapter_separator(full_text)
         # chapters = re.split('第[一二三四五六七八九十百零0-9]{1,5}' + chapter_separator + '[\n\\s\t]',
         #                        full_text)[1:]
