@@ -6,6 +6,7 @@ from django.shortcuts import render
 from django.http import Http404, JsonResponse
 from utils.chinese_utils import make_chapter_from_chinese_book, chinese_tokenize, make_statistics_from_chinese_book
 from utils.english_utils import make_chapter_from_english_book
+from utils.book_utils import make_chapter_from_book
 
 
 from utils.path_utils import PathHandler
@@ -77,7 +78,7 @@ def get_mandarin_book(request):
     # path_statistics = os.path.join(path_book_folder, 'statistics')
     path_book_chapters = os.path.join(path_book_folder, "chapters")
 
-    make_chapter_from_chinese_book(path_book_folder, book_name)
+    make_chapter_from_book(path_book_folder, book_name)
     make_statistics_from_chinese_book(path_book_folder, book_name)
 
     path_book_chapter = os.path.join(path_book_chapters, "{}.txt".format(chapter_number))
@@ -107,7 +108,7 @@ def get_english_book(request):
     # # path_statistics = os.path.join(path_book_folder, 'statistics')
     path_book_chapters = os.path.join(path_book_folder, "chapters")
 
-    make_chapter_from_english_book(path_book_folder, book_name)
+    make_chapter_from_book(path_book_folder, book_name)
     print(path_book_folder, book_name)
     # make_statistics_from_chinese_book(path_book_folder, book_name)
 
