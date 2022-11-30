@@ -3,12 +3,12 @@ server {
 
 	location = /favicon.ico { access_log off; log_not_found off; }
         location /staticfiles/ {
-            root /var/www/readiteasy/readiteasy-backend/staticfiles;
+            root /home/webadmin/readiteasy-backend/staticfiles;
         }
 	
 	location / {
             include proxy_params;
-            proxy_pass http://unix:/var/www/readiteasy/readiteasy-backend/ReadItEasy.sock;
+            proxy_pass http://unix:/home/webadmin/readiteasy-backend/ReadItEasy.sock;
         }	
 
 }

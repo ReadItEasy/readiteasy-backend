@@ -34,6 +34,12 @@ Before running the server, it is important (especially in production) to collect
 ```
 python manage.py collectstatic
 ```
+
+Apply db migrations : 
+```
+python manage.py migrate
+```
+
 To run the server, you simply need to run the following line at the root of the directory
 ```
 python manage.py runserver

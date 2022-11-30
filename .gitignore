@@ -3,6 +3,7 @@ venv/
 notebook/
 tokenization_errors/
 web_scrapping/
+staticfiles/
 
 cache/
 
